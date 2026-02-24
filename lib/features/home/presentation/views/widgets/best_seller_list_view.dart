@@ -21,5 +21,6 @@ class BestSellerListView extends StatelessWidget {
     );
   }
 }
+
 // shrinkWrap: true,  take height of children mean build all items once to specify height
 // remove shrinkWrap because we use SliverFillRemaining instead of SliverToBoxAdapter
