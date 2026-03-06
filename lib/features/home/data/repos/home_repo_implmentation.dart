@@ -30,8 +30,23 @@ class HomeRepoImplmentation implements HomeRepo {
   }
 
   @override
-  Future<List<BookModel>> fetchFeaturedBooks() {
-    // TODO: implement fetchFeaturedBooks
-    throw UnimplementedError();
+  Future<Either<Failures, List<BookModel>>> fetchFeaturedBooks() async {
+    try {
+      var data = await apiService.get(
+        endPoint:
+            'volumes?q=subject:programming&Filtering=free-ebooks&key=AIzaSyBdPB0_E5ljg2GqetTA7fTFsvDmGj2OkkI',
+      );
+      List<BookModel> books = [];
+      for (var item in data['items']) {
+        books.add(BookModel.fromJson(item));
+      }
+      return right(books); // must specify right side
+    } catch (e) {
+      if (e is DioException) {
+        //DioException is built-in method in dio
+        return left(ServerFailure.fromDioException(e)); //must specify left side
+      }
+      return left(ServerFailure(e.toString()));
+    }
   }
 }
