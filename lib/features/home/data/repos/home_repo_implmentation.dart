@@ -3,6 +3,7 @@ import 'package:bookly/core/utils/api_service.dart';
 import 'package:bookly/features/home/data/models/book_model/book_model.dart';
 import 'package:bookly/features/home/data/repos/home_repo.dart';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 
 class HomeRepoImplmentation implements HomeRepo {
   final ApiService apiService;
@@ -12,7 +13,7 @@ class HomeRepoImplmentation implements HomeRepo {
     try {
       var data = await apiService.get(
         endPoint:
-            'volumes?Filtering=free-ebooks&Sorting=newest &q=subject:Programming',
+            'volumes?q=subject:programming&Filtering=free-ebooks&Sorting=newest&key=AIzaSyBdPB0_E5ljg2GqetTA7fTFsvDmGj2OkkI',
       );
       List<BookModel> books = [];
       for (var item in data['items']) {
@@ -20,7 +21,11 @@ class HomeRepoImplmentation implements HomeRepo {
       }
       return right(books); // must specify right side
     } catch (e) {
-      return left(ServerFailure()); //must specify left side
+      if (e is DioException) {
+        //DioException is built-in method in dio
+        return left(ServerFailure.fromDioException(e)); //must specify left side
+      }
+      return left(ServerFailure(e.toString()));
     }
   }
 
