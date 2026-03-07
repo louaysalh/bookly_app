@@ -13,7 +13,7 @@ final class NewsetBooksLoading extends NewsetBooksState {}
 
 final class NewsetBooksSuccess extends NewsetBooksState {
   final List<BookModel> books;
-  const NewsetBookSuccess(this.books);
+  const NewsetBooksSuccess(this.books);
 }
 
 final class NewsetBooksFailure extends NewsetBooksState {
